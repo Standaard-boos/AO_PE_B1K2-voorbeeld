@@ -16,15 +16,16 @@
 
             $conn = new conn();
 
+            $sql = "SELECT name , table_number from orders";
 
 
-            foreach($conn->GetConn()->query('SELECT name , table_number from orders') as $row) {
-                //print_r($row[0]);
-                 echo'    <tr>
-                            <td> '. $row[0] .'</td>
-                            <td> '. $row[1] .' </td>                            
-                        </tr>';
+            if ($result = $conn->GetConn() -> query($sql)) {
+                while ($row = $result -> fetch_row()) {
+                    echo '<tr><td>'. $row[0].' </td><td>'. $row[1].'</td></tr>';
+                }
+                //$result -> free_result();
             }
+
 
         }
 
@@ -33,10 +34,18 @@
 
             $conn = new conn();
 
-            $stmt = $conn->GetConn()->prepare("INSERT INTO orders (name, table_number) VALUES (:name, :table_number)");
-            $stmt->bindParam(':name', $order_name);
-            $stmt->bindParam(':table_number', $table_number);
-            $stmt->execute();
+            $con = $conn->GetConn();
+
+
+            $sql = "INSERT INTO  `orders` (`name`, `table_number`) VALUES (?,?)";
+            //$stmt = $conn->GetConn()->prepare($sql);
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param("si", $order_name, $table_number);
+            if($stmt->execute()){
+                return true;
+            }else{
+                return false;
+            }
 
             
 

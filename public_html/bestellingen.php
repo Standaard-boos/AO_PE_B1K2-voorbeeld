@@ -11,11 +11,16 @@
 
     if (isset($_POST['submitform'])){
 
-        $order_name =  htmlspecialchars($_POST['ordername']);
-        $table_number = htmlspecialchars($_POST['ordertable']);
+
+        $order_name =  $conn->GetConn()->real_escape_string(htmlspecialchars($_POST['ordername']));
+        $table_number = $conn->GetConn()->real_escape_string(htmlspecialchars($_POST['ordertable']));
 
 
-        $classOrders->SaveOrder($order_name,$table_number);
+        if($classOrders->SaveOrder($order_name,$table_number)){
+            //echo 'opgeslagen';
+        }else{
+           // echo'niet opgeslagen';
+        }
 
     }
 
@@ -70,9 +75,11 @@
         <th>Bestelling naam</th>
         <th>Bestelling tafel</th>
     </tr>
-    <?php     // hier wordt de function binnen de class die we boven hebben gedefeneerd aangeroepen
+
+    <?php // hier wordt de function binnen de class die we boven hebben gedefeneerd aangeroepen
              // deze function return een table met data wat we willen laten zien op de pagina
-            $classOrders->GetOrders();?>
+            $classOrders->GetOrders();
+    ?>
 
 </table>
 

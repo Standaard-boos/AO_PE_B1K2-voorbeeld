@@ -6,9 +6,15 @@
 
         public function GetConn(){
 
-            $dbh = new PDO('mysql:host=localhost;dbname=ao_b1k2_oefenen', 'root', '');
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $database = "ao_b1k2_oefenen";
 
-            return $dbh;
+            // Create connection
+            $conn = new mysqli($servername, $username, $password , $database);
+
+            return $conn;
         }
 
     }
